@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="Notification1.css">
+  <title>HR Notification Management</title>
+</head>
+<body>
+  <div class="container">
+    <header>
+ 
+      <div class="header">
+        <h1>HR Notification Management</h1>
+        <p>Manage and send announcements or notifications to all employees</p>
+      </div>
+    </header>
+
+     <div class="notification-form">
+      <label for="title">Notification Title:</label>
+      <input type="text" id="title" placeholder="Enter notification title">
+
+      <label for="message">Notification Message:</label>
+      <textarea id="message" rows="4" placeholder="Enter notification message"></textarea>
+
+      <button id="sendNotification" type="button">Send Notification</button>
+    </div>
+
+
+    <div class="notifications">
+      <h2>Recent Notifications</h2>
+      <div class="notification-cards">
+      <div class="notification-card">
+        <div class="notification-text">Holiday Schedule for 2025</div>
+        <div class="notification-time">Posted on: 01 Nov 2024</div>
+      </div>
+      <div class="notification-card">
+        <div class="notification-text">Employee of the Month</div>
+        <div class="notification-time">Posted on: 20 Oct 2024</div>
+      </div>
+      <div class="notification-cards" id="notificationCards">
+          </div>
+    </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+      const notificationCards = document.getElementById('notificationCards');
+      storedNotifications.forEach(function(notification) {
+        const notificationCard = document.createElement('div');
+        notificationCard.classList.add('notification-card');
+        notificationCard.innerHTML = `
+          <div class="notification-text">${notification.title}</div>
+          <div class="notification-time">Posted on: ${notification.date}</div>
+        `;
+        notificationCards.appendChild(notificationCard);
+      });
+    };
+
+    document.getElementById('sendNotification').addEventListener('click', function() {
+      const title = document.getElementById('title').value;
+      const message = document.getElementById('message').value;
+      const date = new Date().toLocaleDateString();
+
+      if (title && message) {
+ 
+        const newNotification = { title, message, date };
+       
+        
+        const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+
+     
+        storedNotifications.unshift(newNotification); 
+       
+        localStorage.setItem('notifications', JSON.stringify(storedNotifications));
+
+       
+        document.getElementById('title').value = '';
+        document.getElementById('message').value = '';
+
+      
+        window.location.reload();
+      } else {
+        alert('Please fill in both title and message!');
+      }
+    });
+  </script>
+</body>
+</html>
